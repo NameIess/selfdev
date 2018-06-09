@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <aop:config>
+        <!--инструктирует Spring относительно снабжения советом только бинов, имеющих префикс идентификатора myDependency-->
+        <aop:pointcut id="fooExecution" expression="execution(* com.spring.selfdev.demo.aop..foo*(int)) and args(intValue) and bean(myDependency)"/>
+
+        <aop:aspect ref="advice">
+            <aop:before pointcut-ref="fooExecution" method="runBeforeAdvice"/>
+            <aop:around pointcut-ref="fooExecution" method="runAroundAdvice"/>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="advice" class="com.spring.selfdev.demo.aop.aopnamespaceconfig.MyAdvice"/>
+
+    <bean id="myDependency" class="com.spring.selfdev.demo.aop.aopnamespaceconfig.MyDependency"/>
+
+    <bean id="myBean" class="com.spring.selfdev.demo.aop.aopnamespaceconfig.MyBean">
+        <property name="dep" ref="myDependency"/>
+    </bean>
+</beans>

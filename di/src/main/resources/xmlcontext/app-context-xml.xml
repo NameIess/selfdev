@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="messageRender"
+          class="com.spring.selfdev.demo.xmlconf.helloworld.impl.StandardOutMessageRender">
+        <property name="messageProvider" ref="messageProvider"/>
+    </bean>
+
+    <bean id="messageProvider"
+          class="com.spring.selfdev.demo.xmlconf.helloworld.impl.HelloWorldMessageProvider"/>
+
+    <bean id="injectSimple"
+          class="com.spring.selfdev.demo.xmlconf.injections.properties.InjectSimple">
+        <constructor-arg index="0" value="Alex"/>
+        <constructor-arg index="1" value="21"/>
+        <constructor-arg index="2" value="183"/>
+        <constructor-arg index="3" value="true"/>
+        <constructor-arg index="4" value="14212153"/>
+    </bean>
+
+
+    <bean id="builtInSample" class="com.spring.selfdev.demo.xmlconf.propertyedit.PropertyEditorBean">
+        <property name="bytes" value="3"/>
+        <property name="cls" value="java.lang.String"/>
+        <property name="trueOrFalse" value="true"/>
+        <property name="stringList" ref="stringList"/>
+        <property name="stream" value="../resources/xmlcontext/test.txt"/>
+        <property name="floatValue" value="30.555532"/>
+        <property name="date" value="05/22/13"/>
+        <property name="file" value="../resources/xmlcontext/test.txt"/>
+        <property name="locale" value="en_US"/>
+        <property name="pattern" value="a*b"/>
+        <property name="trimString" value="  a b c "/>
+        <property name="url" value="http://www.springframework.org"/>
+        <property name="properties" value="name=Alex age=21"/>
+    </bean>
+
+
+    <util:list id="stringList">
+        <value>String member 1</value>
+        <value>String member 2</value>
+    </util:list>
+
+    <bean id="helper"
+          class="com.spring.selfdev.demo.xmlconf.injections.method.MyHelper" scope="prototype"/>
+
+    <bean id="abstractLookupBean"
+          class="com.spring.selfdev.demo.xmlconf.injections.method.AbstractLookupDemoBean">
+        <lookup-method name="getMyHelper" bean="helper"/>
+    </bean>
+
+    <bean id="standardLookupBean"
+          class="com.spring.selfdev.demo.xmlconf.injections.method.StandardLookupDemoBean">
+        <property name="myHelper" ref="helper"/>
+    </bean>
+
+    <bean id="simpleBean1"
+          class="com.spring.selfdev.demo.xmlconf.beanlifecycle.beforeafter.SimpleBean"
+          init-method="init">
+        <property name="age" value="19"/>
+        <property name="name" value="Dmitry Nosko"/>
+    </bean>
+
+    <bean id="simpleBean2"
+          class="com.spring.selfdev.demo.xmlconf.beanlifecycle.beforeafter.SimpleBean"
+          init-method="init" destroy-method="destroy">
+        <property name="age" value="20"/>
+    </bean>
+
+    <!--Throws exception because 'age' parameter does not set-->
+    <!--<bean id="simpleBean3"-->
+          <!--class="com.spring.selfdev.demo.xmlconf.beanlifecycle.beforeafter.SimpleBean">-->
+        <!--<property name="name" value="Dmitry Nosko"/>-->
+    <!--</bean>-->
+
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames" ref="basenames"/>
+    </bean>
+
+    <util:list id="basenames">
+        <value>buttons</value>
+        <value>labels</value>
+    </util:list>
+
+
+</beans>

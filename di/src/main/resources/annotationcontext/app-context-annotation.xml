@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.spring.selfdev.demo.annotconf" />
+
+    <bean id="message" class="java.lang.String">
+        <constructor-arg index="0" value="Hello World from annotation config"/>
+    </bean>
+
+    <bean id="simpleBean1"
+          class="com.spring.selfdev.demo.annotconf.beanlifecycle.beforeafter.SimpleBean">
+        <property name="age" value="19"/>
+        <property name="name" value="Dmitry Nosko"/>
+    </bean>
+
+    <bean id="simpleBean2"
+          class="com.spring.selfdev.demo.annotconf.beanlifecycle.beforeafter.SimpleBean">
+        <property name="age" value="20"/>
+    </bean>
+
+    <!--Throws exception because 'age' parameter does not set-->
+    <!--<bean id="simpleBean3"-->
+    <!--class="com.spring.selfdev.demo.xmlconf.beanlifecycle.beforeafter.SimpleBean">-->
+    <!--<property name="name" value="Dmitry Nosko"/>-->
+    <!--</bean>-->
+
+</beans>

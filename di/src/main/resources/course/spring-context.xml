@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <import resource="loggers.xml"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <util:list id="properties">
+                <value>classpath:client.properties</value>
+            </util:list>
+        </property>
+
+        <property name="ignoreResourceNotFound" value="false"/>
+
+        <property name="systemPropertiesModeName" value="never"/>
+    </bean>
+
+    <bean id="client" name="admin, guest" class="com.spring.selfdev.demo.course.entity.Client">
+        <!--<constructor-arg type="java.lang.Long" value="1"/>-->
+        <!--<constructor-arg value="Alex Nosko"/>-->
+        <!--<constructor-arg name="greeting" value="Hello, Alex!"/>-->
+
+        <!--<property name="id" value="10"/>-->
+        <!--<property name="name" value="Dmitry Nosko"/>-->
+        <!--<property name="greeting" value="Hello, Dmitry"/>-->
+
+        <constructor-arg name="id" value="${id}"/>
+        <constructor-arg value="${name}"/>
+        <constructor-arg name="greeting" value="${greeting}"/>
+    </bean>
+
+    <bean id="app" class="com.spring.selfdev.demo.course.entity.App">
+        <!--<constructor-arg ref="client"/>-->
+        <!--<constructor-arg ref="consoleLog"/>-->
+
+        <constructor-arg ref="client"/>
+        <constructor-arg value="loggerMap"/>
+    </bean>
+
+    <bean id="dateFormat" class="java.text.DateFormat" factory-method="getDateTimeInstance"/>
+
+    <bean id="event" class="com.spring.selfdev.demo.course.entity.Event" scope="prototype" depends-on="app">
+        <!--inner bean is created by invocation of the parent constructor -->
+        <constructor-arg>
+            <bean class="java.util.Date"/>
+        </constructor-arg>
+
+        <constructor-arg ref="dateFormat"/>
+
+    </bean>
+
+    <util:map id="loggerMap">
+        <entry key="INFO"
+               value-ref="consoleLogger"/>
+        <entry key="ERROR"
+               value-ref="combinedLogger"/>
+    </util:map>
+
+</beans>

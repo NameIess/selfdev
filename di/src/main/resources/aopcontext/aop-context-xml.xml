@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="myBean1" class="com.spring.selfdev.demo.aop.xmlconfig.MyBean">
+        <property name="myDependency" ref="myDependency1"/>
+    </bean>
+
+    <bean id="myBean2" class="com.spring.selfdev.demo.aop.xmlconfig.MyBean">
+        <property name="myDependency" ref="myDependency2"/>
+    </bean>
+
+    <bean id="myDependencyTarget"
+          class="com.spring.selfdev.demo.aop.xmlconfig.MyDependency"/>
+
+    <bean id="myDependency1" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="myDependencyTarget"/>
+        <property name="interceptorNames">
+            <list>
+                <value>advice</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="myDependency2" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="myDependencyTarget"/>
+        <property name="interceptorNames">
+            <list>
+                <value>advisor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="advice" class="com.spring.selfdev.demo.aop.javaconfig.beforeafter.SimpleBeforeAdvice"/>
+
+    <bean id="advisor"
+          class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="advice" ref="advice"/>
+        <property name="pointcut">
+            <bean class="org.springframework.aop.aspectj.AspectJExpressionPointcut">
+                <property name="expression" value="execution(* foo*(..))"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="bean"
+          class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target">
+            <bean class="com.spring.selfdev.demo.aop.javaconfig.intro.TargetBean">
+                <property name="name" value="Alex Nosko"/>
+            </bean>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>isModifiedAdvisor</value>
+            </list>
+        </property>
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+
+    <bean id="isModifiedAdvisor" class="com.spring.selfdev.demo.aop.javaconfig.intro.IsModifiedAdvisor"/>
+</beans>
